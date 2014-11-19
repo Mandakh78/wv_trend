@@ -1,4 +1,4 @@
 Woody vegetation analysis 
 =========================
 
-MODIS NDVI data is used to analyze Woody 
+The purpose of this project is to analyze woody vegetation dynamics over Israel. 
