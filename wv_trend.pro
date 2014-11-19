@@ -1,8 +1,3 @@
-function wv_trend,  ts_data=ts_data, $
-                    ts_file=ts_file, $
-                    out_file=out_file
-
-
 ;+
 ; :NAME:
 ;   wv_trend
@@ -19,17 +14,23 @@ function wv_trend,  ts_data=ts_data, $
 ;
 ; :KEYWORD PARAMETERS:
 ;   DATA:     time series array (T, M, N).
-;   TS_FILE:  time series file name.  
-;   OUT_FILE: set if you want to write the result to a file.  
-;   
-; :CALLING SEQUENCE: 
-;  
+;   TS_FILE:  time series file name.
+;   OUT_FILE: set if you want to write the result to a file.
+;
+; :CALLING SEQUENCE:
+;
 ;
 ; MODIFICATION HISTORY:
 ;    Written by:  Ron Drori 2014
-;    Added keywords: data, file_name, 19/11/14, RD.
+;    Added keywords: data, ts_file, out_file, 19/11/14, RD.
 ;-
-; 
+;
+
+
+
+function wv_trend,  ts_data=ts_data, $
+                    ts_file=ts_file, $
+                    out_file=out_file
 
 IF KEYWORD_SET(ts_file) then begin
     ; Read MODIS yearly minimum NDVI
