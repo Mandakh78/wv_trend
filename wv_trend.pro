@@ -1,37 +1,43 @@
-pro wv_trend
+function wv_trend,  ts_data=ts_data, $
+                    ts_file=ts_file, $
+                    out_file=out_file
 
 
 ;+
-; NAME:
+; :NAME:
 ;   wv_trend
 ;
-; PURPOSE:
+; :PURPOSE:
 ; Analyzing yearly minimum NDVI time series obtained from MODIS
 ; in order to detect trends and processes in woody vegetation.
 ;
 ; CATEGORY:
 ;  Vegetation monitoring program
 ;
-; CALLING SEQUENCE:
-;  
+; :Returns:
+;  Array with slope and pvalue.
 ;
-; OUTPUTS:
+; :KEYWORD PARAMETERS:
+;   DATA:     time series array (T, M, N).
+;   TS_FILE:  time series file name.  
+;   OUT_FILE: set if you want to write the result to a file.  
+;   
+; :CALLING SEQUENCE: 
 ;  
-;
 ;
 ; MODIFICATION HISTORY:
 ;    Written by:  Ron Drori 2014
+;    Added keywords: data, file_name, 19/11/14, RD.
 ;-
 ; 
 
+IF KEYWORD_SET(ts_file) then begin
+    ; Read MODIS yearly minimum NDVI
+    ts_data = READ_TIFF(ts_file, GEOTIFF=gtag)
+ENDIF
 
-
-; Read MODIS yearly minimum NDVI
-PRINT, "Reading MODIS file" + SYSTIME()
-modis_ts_file = 'D:\DATA\MODIS\NDVI\year\14_17\MODIS_NDVI_MIN_16day_2014.tif'
-modis_ts_data = READ_TIFF(modis_ts_file, GEOTIFF=gtag)
-dims = modis_ts_data.DIM
-nsamples = dims[0] & xs = dims[1] & ys=dims[2]
+dims = ts_data.DIM
+xs = dims[1] & ys=dims[2]
 
 ; find slope and pvalue
 stat =FLTARR(2, xs, ys)
@@ -43,10 +49,11 @@ FOR y=0,ys-1 do begin
   ENDFOR
 ENDFOR
  
-; write results out
-PRINT,"Writing out file"  + SYSTIME()
-stat_out_file = 'D:\DATA\MODIS\NDVI\year\14_17\MODIS_stat_slope_p1.tif'
-WRITE_TIFF, stat_out_file, stat, GEOTIFF=gtag, /FLOAT
+IF KEYWORD_SET(out_file) then begin
+  WRITE_TIFF, out_file, stat, GEOTIFF=gtag, /FLOAT
+ENDIF
+
+RETURN, stat
 
 end
 
